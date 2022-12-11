@@ -11,13 +11,31 @@ from tqdm import tqdm
 DATA_PATH = os.path.join(os.path.dirname(__file__), "data")
 
 def get_device():
-        if torch.cuda.is_available():
-            return torch.device('cuda:0')
-        else:
-            return torch.device('cpu')
+    """
+    Function to check and return if any gpu device is available to train the model
+    If GPU not present, model is trained on CPU.
+    """
+    if torch.cuda.is_available():
+        return torch.device('cuda:0')
+    else:
+        return torch.device('cpu')
 
 def data_loader(dataset_type="train", dataset="CIFAR10", valid_size=0.1, batch_size=64, 
                 shuffle=True, random_seed=42, data_path=DATA_PATH):
+    """
+    Function to create a loader object which loads data in batches for training.
+    Params:
+        dataset_type: Type of dataset - 'train' or 'test'.
+        dataset: Any dataset name provided by torchvision library
+        valid_size: Size of validation set
+        batch_size: number of data samples to be loaded in each batch
+        shuffle: shuffle the data samples before loading
+        random_seed:
+        data_path: Path to save dataset
+    Returns:
+        train_loader, valid_loader, test_loader: Returns train & valid loader if dataset type is
+                                                 'train' else return test loader
+    """
     if not os.path.exists(data_path):
         os.makedirs(data_path)
 
@@ -64,6 +82,16 @@ def data_loader(dataset_type="train", dataset="CIFAR10", valid_size=0.1, batch_s
 
 
 def calculate_metrics(loader, model, criteria):
+    """
+    Function to compute & return the loss and accuracy of model
+    Params:
+        loader: data loader object to evaluate trained model performance
+        model: trained model object
+        criteria: torch criterion to compute loss
+    Returns:
+        loss: loss of model
+        accuracy: accuracy of model
+    """
     device = get_device()
     model = model.to(device)
     steps, loss = 0, 0

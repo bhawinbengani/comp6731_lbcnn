@@ -4,6 +4,10 @@ import torch.nn.functional as F
 
 
 class ConvLBC(nn.Conv2d):
+    """
+    This class implements the local binary covolutional filter as described in the 
+    paper
+    """
     def __init__(self, in_channels, out_channels, kernel_size=3, sparsity=0.5):
         super().__init__(in_channels, out_channels, kernel_size, padding=1, bias=False)
         weights = next(self.parameters())
@@ -15,6 +19,9 @@ class ConvLBC(nn.Conv2d):
         weights.requires_grad_(False)
 
 class LayerLBC(nn.Module):
+    """
+    This class implements the LBC layer as described in the paper
+    """
     def __init__(self, numChannels, numWeights, sparsity=0.5):
         super().__init__()
         self.batch_norm = nn.BatchNorm2d(numChannels)
@@ -30,6 +37,10 @@ class LayerLBC(nn.Module):
         return x
         
 class LBCNN(nn.Module):
+    """
+    LBCNN model to classify images of CIFAR10 & CIFAR100 dataset. This has 
+    10 LBCLayer blocks (10 LBC filters & 10 Conv2D filters) & 2 Linear layers.
+    """
     def __init__(self, nInputPlane=3, numChannels=384, numWeights=704, full=512, depth=10, 
                  sparsity=0.001, num_classes=100):
         super().__init__()

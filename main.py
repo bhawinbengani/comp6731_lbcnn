@@ -19,7 +19,24 @@ MODEL_PATH = os.path.join(os.path.dirname(__file__), "models")
 
 def train(train_loader, valid_loader, epochs=5, criteria="CrossEntropyLoss",
          optimiser="SGD", lr_scheduler="StepLR", params=None, model_path=MODEL_PATH,
-         model_filename=None):
+         model_filename=None) -> object:
+    
+    """
+    Return a learnt LBCNN model from the passed dataset.
+    Params:
+        train_loader (DataLoader): Torch Dataloader object holding training data
+        valid_loader (DataLoader): Torch Dataloader object holding validation data
+        epochs (int): Number of iterations to train the model
+        criteria (str): Torch criterion to compute loss
+        optimiser (str): Torch optimizer
+        lr_scheduler (str): Torch learning rate scheduler to update the learning rate after every epoch based
+                    on some criteria.
+        params (dict): Dictionary of parameters to be passed to criterion, optimiser & lr_scheduler
+        model_path (str): Path where training model will be saved
+        model file name (str): filename to dump the trained model
+    Returns:
+        model (object): LBCNN model trained on the provided data
+    """
     
     device = get_device()
 

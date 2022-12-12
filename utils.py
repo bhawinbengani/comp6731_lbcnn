@@ -107,3 +107,23 @@ def calculate_metrics(loader, model, criteria):
             loss += criterion(outputs, labels).cpu().numpy()
             steps += 1
     return loss/steps, correct/total
+
+def get_parameters_count(model):
+    """
+    This function returns the number of parameters of model
+    """
+    return sum(p.numel() for p in model.parameters() if p.requires_grad)
+
+def get_model_size(model):
+    """
+    This function returns the size of the model
+    """
+    param_size = 0
+    for param in model.parameters():
+        param_size += param.nelement() * param.element_size()
+    buffer_size = 0
+    for buffer in model.buffers():
+        buffer_size += buffer.nelement() * buffer.element_size()
+
+    size_all_mb = (param_size + buffer_size) / 1024**2
+    return size_all_mb

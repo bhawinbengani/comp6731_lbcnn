@@ -10,8 +10,7 @@ import torch.nn as nn
 from tqdm import tqdm
 
 from lbcnn import LBCNN
-from utils import calculate_metrics, data_loader, get_device
-
+from utils import calculate_metrics, data_loader, get_device, get_model_size, get_parameters_count
 os.environ['KMP_DUPLICATE_LIB_OK']='True'
 warnings.filterwarnings("ignore")
 
@@ -133,3 +132,5 @@ if __name__ == "__main__":
     model = train(train_loader, valid_loader, epochs=80, lr_scheduler="ReduceLROnPlateau", 
                   params=params, model_filename="LBCNN_cifar100.pkl")
     test(test_loader, model)
+    print("Number of parameters: {}".format(get_parameters_count(model)))
+    print("Model Size: {:.3f}MB".format(get_model_size(model)))
